@@ -4,11 +4,11 @@ import Spinner from './spinner';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-function Charts() {
-  const [options1, setOptions1] = useState(null);
-  const [points1, setPoints1] = useState(null);
-  const [options2, setOptions2] = useState(null);
-  const [points2, setPoints2] = useState(null);
+const Charts: React.FC = () => {
+  const [options1, setOptions1] = useState<any>();
+  const [points1, setPoints1] = useState<any>();
+  const [options2, setOptions2] = useState<any>();
+  const [points2, setPoints2] = useState<any>();
 
   useEffect(() => {
     (async () => {
@@ -26,7 +26,7 @@ function Charts() {
         response[1].json(),
       ]);
       setPoints1(
-        result[0].prices.map((element) => {
+        result[0].prices.map((element: number[]) => {
           return {
             x: new Date(element[0]),
             y: element[1],
@@ -34,7 +34,7 @@ function Charts() {
         })
       );
       setPoints2(
-        result[1].prices.map((element) => {
+        result[1].prices.map((element: number[]) => {
           return {
             x: new Date(element[0]),
             y: element[1],

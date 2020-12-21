@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Calc() {
+const Calc: React.FC = () => {
   const classes = useStyles();
   const [currency1, setCurrency1] = useState('btc');
   const [currency2, setCurrency2] = useState('usd');
@@ -25,13 +25,23 @@ function Calc() {
   const [display, setDisplay] = useState(1);
   const data = useContext(DataContext);
 
+ const onChange1  = (e: React.ChangeEvent<{ value: unknown }>): void => {
+    const newValue = e.currentTarget.value as string;
+    setCurrency1(newValue)
+}
+
+const onChange2 = (e: React.ChangeEvent<{ value: unknown }>): void => {
+  const newValue = e.currentTarget.value as string;
+  setCurrency2(newValue)
+}
+
   useEffect(() => {
     if (currency1 === 'btc') {
-      return setDisplay(data['bitcoin'][currency2] * value1);
+      return setDisplay(data['bitcoin'][currency2] * +value1);
     } else if (currency1 === 'eth') {
-      return setDisplay(data['ethereum'][currency2] * value1);
+      return setDisplay(data['ethereum'][currency2] * +value1);
     } else {
-      return setDisplay(data['busd'][currency2] * value1);
+      return setDisplay(data['busd'][currency2] * +value1);
     }
   }, [value1, currency1, currency2, data]);
 
@@ -57,9 +67,7 @@ function Calc() {
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={currency1}
-              onChange={(e) => {
-                setCurrency1(e.target.value);
-              }}
+              onChange={onChange1}
               label="currency"
             >
               <MenuItem value={'btc'}>bitcoin</MenuItem>
@@ -75,9 +83,7 @@ function Calc() {
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={currency2}
-              onChange={(e) => {
-                setCurrency2(e.target.value);
-              }}
+              onChange={onChange2}
               label="currency"
             >
               <MenuItem value={'btc'}>bitcoin</MenuItem>

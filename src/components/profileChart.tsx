@@ -4,7 +4,12 @@ import { DataContext } from './main';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-function ProfileChart({ eth, btc }) {
+type Props = {
+  eth: number;
+  btc: number;
+};
+
+const ProfileChart: React.FC<Props> = ({ eth, btc }) => {
   const data = useContext(DataContext);
   const [usd, setUsd] = useState(
     eth * data['ethereum']['usd'] + btc * data['bitcoin']['usd']
@@ -57,7 +62,7 @@ function ProfileChart({ eth, btc }) {
             dollars
           </p>
           <p>
-            {btc} Bitcoin = {btc * data['bitcoin']['usd'].toFixed(2)} dollars
+            {btc} Bitcoin = {btc * data['bitcoin']['usd']} dollars
           </p>
           <hr></hr>
           <p> {usd.toFixed(2)} dollars total!!!</p>
@@ -66,6 +71,6 @@ function ProfileChart({ eth, btc }) {
       </div>
     </>
   );
-}
+};
 
 export default ProfileChart;

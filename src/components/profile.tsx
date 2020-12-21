@@ -23,14 +23,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Profile() {
+const Profile: React.FC = () => {
   const classes = useStyles();
   const [eth, setEth] = useState(24);
   const [btc, setBtc] = useState(2);
   const [ethInput, setEthInput] = useState('');
   const [btcInput, setBtcInput] = useState('');
 
-  const handlePlus = (val) => {
+  const handlePlus = (val: string):void => {
     if (val === 'eth') {
       setEth(eth + +ethInput);
       setEthInput('');
@@ -41,7 +41,7 @@ export default function Profile() {
     }
   };
 
-  const handleMinus = (val) => {
+  const handleMinus = (val:string): void => {
     if (val === 'eth') {
       if (eth - +ethInput < 0) {
         setEth(0);
@@ -72,7 +72,7 @@ export default function Profile() {
       >
         <Divider />
         <ListItem className={classes.money}>
-          <div className={classes.name}>Bitcoins = {btc}</div>
+          <div>Bitcoins = {btc}</div>
 
           <ButtonGroup size="small" aria-label="small outlined button group">
             <TextField
@@ -91,7 +91,7 @@ export default function Profile() {
         </ListItem>
         <Divider />
         <ListItem className={classes.money}>
-          <div className={classes.name}>Ethereum = {eth}</div>
+          <div>Ethereum = {eth}</div>
 
           <ButtonGroup size="small" aria-label="small outlined button group">
             <TextField
@@ -113,3 +113,5 @@ export default function Profile() {
     </>
   );
 }
+
+export default Profile;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -12,9 +11,22 @@ import Charts from './charts';
 import Profile from './profile';
 import { createContext } from 'react';
 
-export const DataContext = createContext(null);
+export const DataContext = createContext<{
+  ethereum: { [key: string]: number; btc: number; eth: number; usd: number };
+  bitcoin: { [key: string]: number;btc: number; eth: number; usd: number };
+  busd: { [key: string]: number;btc: number; eth: number; usd: number };
+}>({
+  ethereum: { btc: 0.02718889, eth: 1.0, usd: 496.78 },
+  bitcoin: { btc: 1.0, eth: 36.794218, usd: 18265.5 },
+  busd: { btc: 5.463e-5, eth: 0.00201068, usd: 0.998221 },
+});
 
-function TabPanel(props) {
+type TabPanelProps = {
+  value: number;
+  index: number;
+};
+
+const TabPanel: React.FC<TabPanelProps> = (props) => {
   const { children, value, index, ...other } = props;
 
   return (
@@ -32,15 +44,9 @@ function TabPanel(props) {
       )}
     </div>
   );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
+function a11yProps(index: number): { id: string; 'aria-controls': string } {
   return {
     id: `simple-tab-${index}`,
     'aria-controls': `simple-tabpanel-${index}`,
@@ -54,9 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleTabs() {
+const SimpleTabs: React.FC = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const [data, setData] = useState({
     ethereum: { btc: 0.02718889, eth: 1.0, usd: 496.78 },
@@ -74,7 +80,7 @@ export default function SimpleTabs() {
     })();
   }, []);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: object, newValue: number): void => {
     setValue(newValue);
   };
 
@@ -101,4 +107,6 @@ export default function SimpleTabs() {
       </DataContext.Provider>
     </div>
   );
-}
+};
+
+export default SimpleTabs;
