@@ -25,16 +25,6 @@ const Calc: React.FC = () => {
   const [display, setDisplay] = useState(1);
   const data = useContext(DataContext);
 
- const onChange1  = (e: React.ChangeEvent<{ value: unknown }>): void => {
-    const newValue = e.currentTarget.value as string;
-    setCurrency1(newValue)
-}
-
-const onChange2 = (e: React.ChangeEvent<{ value: unknown }>): void => {
-  const newValue = e.currentTarget.value as string;
-  setCurrency2(newValue)
-}
-
   useEffect(() => {
     if (currency1 === 'btc') {
       return setDisplay(data['bitcoin'][currency2] * +value1);
@@ -67,7 +57,9 @@ const onChange2 = (e: React.ChangeEvent<{ value: unknown }>): void => {
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={currency1}
-              onChange={onChange1}
+              onChange={(e: React.ChangeEvent<{ value: unknown }>): void => {
+                setCurrency1(e.target.value as string);
+              }}
               label="currency"
             >
               <MenuItem value={'btc'}>bitcoin</MenuItem>
@@ -83,7 +75,9 @@ const onChange2 = (e: React.ChangeEvent<{ value: unknown }>): void => {
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={currency2}
-              onChange={onChange2}
+              onChange={(e: React.ChangeEvent<{ value: unknown }>): void => {
+                setCurrency2(e.target.value as string);
+              }}
               label="currency"
             >
               <MenuItem value={'btc'}>bitcoin</MenuItem>
@@ -104,6 +98,6 @@ const onChange2 = (e: React.ChangeEvent<{ value: unknown }>): void => {
       </div>
     </>
   );
-}
+};
 
 export default Calc;

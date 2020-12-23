@@ -4,11 +4,56 @@ import Spinner from './spinner';
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
+type PointsType = {
+  x: Date;
+  y: number;
+};
+
+type OptionsType = {
+  animationEnabled: boolean;
+  title: {
+    text: string;
+  };
+  axisX: {
+    valueFormatString: string;
+  };
+  axisY: {
+    maximum: number;
+    minimum: number;
+    prefix: string;
+  };
+  data: [
+    {
+      yValueFormatString: string;
+      xValueFormatString: string;
+      type: string;
+      dataPoints: PointsType[] | undefined;
+    }
+  ];
+};
+
+type MinMaxType = {
+  min: number;
+  max: number;
+};
+
 const Charts: React.FC = () => {
-  const [options1, setOptions1] = useState<any>();
-  const [points1, setPoints1] = useState<any>();
-  const [options2, setOptions2] = useState<any>();
-  const [points2, setPoints2] = useState<any>();
+  const [options1, setOptions1] = useState<OptionsType>();
+  const [points1, setPoints1] = useState<Array<PointsType>>([
+    { x: new Date(), y: 100000 },
+  ]);
+  const [options2, setOptions2] = useState<OptionsType>();
+  const [points2, setPoints2] = useState<Array<PointsType>>([
+    { x: new Date(), y: 100000 },
+  ]);
+  const [ethMinMax, setEthMinMax] = useState<MinMaxType>({
+    min: 100,
+    max: 1000,
+  });
+  const [btcMinMax, setBTCMinMax] = useState<MinMaxType>({
+    min: 1000,
+    max: 100000,
+  });
 
   useEffect(() => {
     (async () => {
@@ -45,6 +90,15 @@ const Charts: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const eth = points2
+      .slice()
+      .sort((a: PointsType, b: PointsType) => a.y - b.y);
+    setEthMinMax({ min: eth[0].y, max: eth[eth.length - 1].y });
+    const btc = points1
+      .slice()
+      .sort((a: PointsType, b: PointsType) => a.y - b.y);
+    setBTCMinMax({ min: btc[0].y, max: btc[btc.length - 1].y });
+
     setOptions1({
       animationEnabled: true,
       title: {
@@ -54,8 +108,8 @@ const Charts: React.FC = () => {
         valueFormatString: 'DD MMM',
       },
       axisY: {
-        maximum: 21000,
-        minimum: 12000,
+        maximum: btcMinMax.max + 2000,
+        minimum: btcMinMax.min - 2000,
         prefix: '$',
       },
       data: [
@@ -76,8 +130,8 @@ const Charts: React.FC = () => {
         valueFormatString: 'DD MMM',
       },
       axisY: {
-        maximum: 650,
-        minimum: 350,
+        maximum: ethMinMax.max + 100,
+        minimum: ethMinMax.min - 100,
         prefix: '$',
       },
       data: [
@@ -89,20 +143,35 @@ const Charts: React.FC = () => {
         },
       ],
     });
-  }, [points1, points2]);
+  }, [
+    points1,
+    points2,
+    ethMinMax.min,
+    ethMinMax.max,
+    btcMinMax.max,
+    btcMinMax.min,
+  ]);
 
   return (
     <>
       <div className="charts">
         <div className="charts__item">
-          {points1 ? <CanvasJSChart options={options1} /> : <Spinner />}
+          {points1.length > 1 ? (
+            <CanvasJSChart options={options1} />
+          ) : (
+            <Spinner />
+          )}
         </div>
         <div className="charts__item">
-          {points2 ? <CanvasJSChart options={options2} /> : <Spinner />}
+          {points2.length > 1 ? (
+            <CanvasJSChart options={options2} />
+          ) : (
+            <Spinner />
+          )}
         </div>
       </div>
     </>
   );
-}
+};
 
 export default Charts;

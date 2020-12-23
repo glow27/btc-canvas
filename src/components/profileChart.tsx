@@ -62,7 +62,7 @@ const ProfileChart: React.FC<Props> = ({ eth, btc }) => {
             dollars
           </p>
           <p>
-            {btc} Bitcoin = {btc * data['bitcoin']['usd']} dollars
+            {btc} Bitcoin = {(btc * data['bitcoin']['usd']).toFixed(2)} dollars
           </p>
           <hr></hr>
           <p> {usd.toFixed(2)} dollars total!!!</p>
